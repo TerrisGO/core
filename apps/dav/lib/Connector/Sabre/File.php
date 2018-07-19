@@ -223,6 +223,11 @@ class File extends Node implements IFile, IFileNode {
 			$view = \OC\Files\Filesystem::getView();
 			if ($view) {
 				$run = $this->emitPreHooks($exists);
+				if ($run === false) {
+					$view->unlockFile($this->path, ILockingProvider::LOCK_SHARED);
+					$view->unlink($this->path);
+					return null;
+				}
 			} else {
 				$run = true;
 			}
