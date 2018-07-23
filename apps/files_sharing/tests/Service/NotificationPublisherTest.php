@@ -20,6 +20,7 @@
  */
 namespace OCA\Files_Sharing\Tests\API;
 
+use OCP\BackgroundJob\IJob;
 use Test\TestCase;
 use OCP\Notification\INotification;
 use OCA\Files_Sharing\Service\NotificationPublisher;
@@ -47,6 +48,7 @@ class NotificationPublisherTest extends TestCase {
 
 	/** @var IURLGenerator */
 	private $urlGenerator;
+	private $joblist;
 
 	/** @var NotificationPublisher */
 	private $publisher;
@@ -56,12 +58,14 @@ class NotificationPublisherTest extends TestCase {
 		$this->userManager = $this->createMock('OCP\IUserManager');
 		$this->notificationManager = $this->createMock(\OCP\Notification\IManager::class);
 		$this->urlGenerator = $this->createMock('OCP\IURLGenerator');
+		$this->joblist = $this->createMock(IJob::class);
 
 		$this->publisher = new NotificationPublisher(
 			$this->notificationManager,
 			$this->userManager,
 			$this->groupManager,
-			$this->urlGenerator
+			$this->urlGenerator,
+			$this->joblist
 		);
 
 		$this->urlGenerator->expects($this->any())
